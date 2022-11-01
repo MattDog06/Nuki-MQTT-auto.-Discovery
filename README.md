@@ -6,6 +6,9 @@
 Python script for creating Home Assistant MQTT auto. discovery topics for a Nuki Smart Lock 3.0 Pro with enabled MQTT client. (currently only available in the beta firmware) Execute this script once to create a MQTT device with all necessary entities.
 
 ## Usage
+
+Just copy the URL of this repository and add it under HACS --> Custom Repositories (Category: Python-Script)
+
 ### Paramters
 
 | Parameter | Type | Required | Description | Example |
