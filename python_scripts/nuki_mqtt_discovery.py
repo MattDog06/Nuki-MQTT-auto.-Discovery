@@ -58,17 +58,11 @@ def get_error_message(parameter):
 
 
 def get_object_id(name):  
-  return name.replace(" ", "_").lower()
+  return name.replace(" ", "_").replace("-", "_").lower()
 
 
 def to_json(dictonary):
-  logger.info(str(dictonary))
-
-  json = '{}'.format(dictonary).replace("\'", "\"").replace("\"\"", "\'").replace("True", "true").replace("False", "false")
-
-  logger.info(json)
-
-  return json
+  return '{}'.format(dictonary).replace("\'", "\"").replace("\"\"", "\'").replace("True", "true").replace("False", "false")
 
 
 def get_discovery_topic(discovery_topic, component, node_id, name):
@@ -201,6 +195,17 @@ def get_keypad_battery_critical_payload(device_id, device_name, device_model, na
   })
 
 
+def get_button_payload(device_id, device_name, device_model, name, action):
+  return to_json({
+    'availability': get_availability(device_id),
+    'device': get_device(device_id, device_name, device_model),
+    'name': name,
+    'unique_id': get_object_id(name),
+    'command_topic': get_topic(device_id, TOPIC_LOCK_ACTION),
+    'payload_press': ACTION_UNLATCH
+  })
+
+
 def publish(hass, topic, payload):
   data = {
     "topic": topic,
@@ -277,6 +282,21 @@ def main(hass, data):
     name = device_name + " Keypad Battery Critical"
     publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, name), 
       get_keypad_battery_critical_payload(device_id, device_name, device_model, name))
+
+  # Unlatch button
+  name = device_name + " Unlatch"
+  publish(hass, get_discovery_topic(discovery_topic, "button", device_id, name),
+    get_button_payload(device_id, device_name, device_model, name, ACTION_UNLATCH))
+
+  # Lock'n'Go button
+  name = device_name + " Lock-n-Go"
+  publish(hass, get_discovery_topic(discovery_topic, "button", device_id, name),
+    get_button_payload(device_id, device_name, device_model, name, ACTION_LOCKNGO))
+
+  # Lock'n'Go with unlatch button
+  name = device_name + " Lock-n-Go With Unlatch"
+  publish(hass, get_discovery_topic(discovery_topic, "button", device_id, name),
+    get_button_payload(device_id, device_name, device_model, name, ACTION_LOCKNGO_UNLATCH))
 
 
 main(hass, data)
