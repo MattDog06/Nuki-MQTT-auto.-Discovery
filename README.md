@@ -32,4 +32,4 @@ data:
 ```
 
 ### Home Assistant Device
-![Sample](homeassistant_example.png)
+![Sample](homeassistant_device.png)
