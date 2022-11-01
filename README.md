@@ -13,7 +13,7 @@ Python script for creating Home Assistant MQTT auto. discovery topics for a Nuki
 | ---- | :--: | :------: | ----------- | ------- |
 | device_id | string | Yes | The device ID also known as Nuki Smart Lock ID. | 12345678 |
 | device_name | string | Yes | The device name | Front Door Lock |
-| device_model | string | Yes | The device model | Nuki Smart Lock 3.0 Pro |
+| device_model | string | Yes | The device model | Smart Lock 3.0 Pro |
 | discovery_topic | list | No | The home assistant auto. discovery topic (Default: homeassistant) | homeassistant |
 | door_sensor_available | bool | No | If true, the door sensor data is also discovered (Default: false) | true |
 | keypad_available | bool | No | 	If true, the keypad data is also discovered (Default: false) | false |
