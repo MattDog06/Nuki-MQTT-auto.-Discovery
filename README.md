@@ -25,7 +25,7 @@ service: python_script.nuki_mqtt_discovery
 data:
   device_id: 12345678
   device_name: Front Door Lock
-  device_model: Nuki Smart Lock 3.0 Pro
+  device_model: Smart Lock 3.0 Pro
   discovery_topic: homeassistant
   door_sensor_available: true
   keypad_available: false
