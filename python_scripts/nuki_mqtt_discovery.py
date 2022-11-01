@@ -272,4 +272,5 @@ def main(hass, data):
     publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, name), 
       get_keypad_battery_critical_payload(device_id, device_name, device_model, name))
 
+
 main(hass, data)
