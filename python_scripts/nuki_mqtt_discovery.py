@@ -62,7 +62,7 @@ def get_object_id(name):
 
 
 def to_json(dictonary):
-  return '{}'.format(dictonary).replace("\'", "\"").replace("\"\"", "\'").replace("True", "true").replace("False", "false")
+  return '{}'.format(dictonary).replace("\'", "\"").replace("\"\"", "\'")
 
 
 def get_discovery_topic(discovery_topic, component, node_id, name):
@@ -77,8 +77,8 @@ def get_availability(device_id):
   return [
     {
       'topic': get_topic(device_id, TOPIC_CONNECTED),
-      'payload_available': True,
-      'payload_not_available': False
+      'payload_available': 'true',
+      'payload_not_available': 'false'
     }
   ]
 
@@ -101,15 +101,15 @@ def get_lock_payload(device_id, device_name, device_model, name):
     'name': name,
     'unique_id': get_object_id(name),
     'command_topic': get_topic(device_id, TOPIC_LOCK_ACTION),
-    'payload_lock': ACTION_LOCK,
-    'payload_unlock': ACTION_UNLOCK,
-    'payload_open': ACTION_UNLATCH,
+    'payload_lock': str(ACTION_LOCK),
+    'payload_unlock': str(ACTION_UNLOCK),
+    'payload_open': str(ACTION_UNLATCH),
     'state_topic': get_topic(device_id, TOPIC_STATE),
-    'state_locked': STATE_LOCKED,
-    'state_unlocked': STATE_UNLOCKED,
-    'state_opening': STATE_UNLATCHING,
-    'state_open': STATE_UNLATCHED,
-    'value_template': '{% if value == ' + str(STATE_UNLOCKED_LOCKNGO) + '%}' + str(STATE_UNLOCKED) + '{% else %}{{value}}{% endif %}'
+    'state_locked': str(STATE_LOCKED),
+    'state_unlocked': str(STATE_UNLOCKED),
+    'state_opening': str(STATE_UNLATCHING),
+    'state_open': str(STATE_UNLATCHED),
+    'value_template': '{% if value == \'\'' + str(STATE_UNLOCKED_LOCKNGO) + '\'\'%}' + str(STATE_UNLOCKED) + '{% else %}{{value}}{% endif %}'
   })
 
 
@@ -122,8 +122,8 @@ def get_battery_critical_payload(device_id, device_name, device_model, name):
     'device_class': 'battery',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_BATTERY_CRITICAL),
-    'payload_off': False,
-    'payload_on': True
+    'payload_off': 'false',
+    'payload_on': 'true'
   })
 
 
@@ -150,8 +150,8 @@ def get_battery_charging_payload(device_id, device_name, device_model, name):
     'device_class': 'battery_charging',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_BATTERY_CHARGING),
-    'payload_off': False,
-    'payload_on': True
+    'payload_off': 'false',
+    'payload_on': 'true'
   })
 
 
@@ -162,8 +162,8 @@ def get_door_sensor_payload(device_id, device_name, device_model, name):
     'name': name,
     'unique_id': get_object_id(name),
     'device_class': 'door',
-    'payload_off': DOOR_STATE_DOOR_CLOSED,
-    'payload_on': DOOR_STATE_DOOR_OPENED,
+    'payload_off': str(DOOR_STATE_DOOR_CLOSED),
+    'payload_on': str(DOOR_STATE_DOOR_OPENED),
     'state_topic': get_topic(device_id, TOPIC_DOOR_SENSOR_STATE),
   })
 
@@ -177,8 +177,8 @@ def get_door_sensor_battery_critical_payload(device_id, device_name, device_mode
     'device_class': 'battery',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_DOOR_SENSOR_BATTERY_CIRITCAL),
-    'payload_off': False,
-    'payload_on': True
+    'payload_off': 'false',
+    'payload_on': 'true'
   })
 
 
@@ -191,8 +191,8 @@ def get_keypad_battery_critical_payload(device_id, device_name, device_model, na
     'device_class': 'battery',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_KEYPAD_BATTERY_CRITICAL),
-    'payload_off': False,
-    'payload_on': True
+    'payload_off': 'false',
+    'payload_on': 'true'
   })
 
 
@@ -203,7 +203,7 @@ def get_button_payload(device_id, device_name, device_model, name, action):
     'name': name,
     'unique_id': get_object_id(name),
     'command_topic': get_topic(device_id, TOPIC_LOCK_ACTION),
-    'payload_press': ACTION_UNLATCH
+    'payload_press': str(action)
   })
 
 
@@ -211,7 +211,7 @@ def publish(hass, topic, payload):
   data = {
     "topic": topic,
     "payload": payload,
-    "retain": True
+    "retain": 'true'
   }
 
   hass.services.call("mqtt", "publish", data)
