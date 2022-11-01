@@ -62,7 +62,13 @@ def get_object_id(name):
 
 
 def to_json(dictonary):
-  return '{}'.format(dictonary).replace("\'", "\"").replace("\"\"", "\'") 
+  logger.info(str(dictonary))
+
+  json = '{}'.format(dictonary).replace("\'", "\"").replace("\"\"", "\'").replace("True", "true").replace("False", "false")
+
+  logger.info(json)
+
+  return json
 
 
 def get_discovery_topic(discovery_topic, component, node_id, name):
@@ -77,7 +83,7 @@ def get_availability(device_id):
   return [
     {
       'topic': get_topic(device_id, TOPIC_CONNECTED),
-      'payload_available': 'true'
+      'payload_available': True
     }
   ]
 
@@ -121,8 +127,8 @@ def get_battery_critical_payload(device_id, device_name, device_model, name):
     'device_class': 'battery',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_BATTERY_CRITICAL),
-    'payload_off': 'false',
-    'payload_on': 'true'
+    'payload_off': False,
+    'payload_on': True
   })
 
 
@@ -149,8 +155,8 @@ def get_battery_charging_payload(device_id, device_name, device_model, name):
     'device_class': 'battery_charging',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_BATTERY_CHARGING),
-    'payload_off': 'false',
-    'payload_on': 'true'
+    'payload_off': False,
+    'payload_on': True
   })
 
 
@@ -176,8 +182,8 @@ def get_door_sensor_battery_critical_payload(device_id, device_name, device_mode
     'device_class': 'battery',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_DOOR_SENSOR_BATTERY_CIRITCAL),
-    'payload_off': 'false',
-    'payload_on': 'true'
+    'payload_off': False,
+    'payload_on': True
   })
 
 
@@ -190,8 +196,8 @@ def get_keypad_battery_critical_payload(device_id, device_name, device_model, na
     'device_class': 'battery',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_KEYPAD_BATTERY_CRITICAL),
-    'payload_off': 'false',
-    'payload_on': 'true'
+    'payload_off': False,
+    'payload_on': True
   })
 
 
