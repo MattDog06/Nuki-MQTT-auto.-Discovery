@@ -77,7 +77,8 @@ def get_availability(device_id):
   return [
     {
       'topic': get_topic(device_id, TOPIC_CONNECTED),
-      'payload_available': True
+      'payload_available': True,
+      'payload_not_available': False
     }
   ]
 
