@@ -221,9 +221,12 @@ def main(hass, data):
   device_id = data.get(DEVICE_ID)
   device_name = data.get(DEVICE_NAME)
   device_model = data.get(DEVICE_MODEL)
-  discovery_topic = data.get(DISCOVERY_TOPIC)
-  door_sensor_available = data.get(DOOR_SENSOR_AVAILABLE)
-  keypad_available = data.get(KEYPAD_AVAILABLE)
+  discovery_topic = data.get(DISCOVERY_TOPIC) or DEFAULT_DISCOVERY_TOPIC
+  door_sensor_available = data.get(DOOR_SENSOR_AVAILABLE) or False
+  keypad_available = data.get(KEYPAD_AVAILABLE) or False
+
+  if isinstance(device_id, int): # Because of hex device id, always convert it to string
+    device_id = str(device_id)
 
   if device_id == None or device_id == "":
     logger.error(get_error_message(device_id))
@@ -236,16 +239,6 @@ def main(hass, data):
   if device_model == None or device_model == "":
     logger.error(get_error_message(device_id))
     return
-
-  if discovery_topic == None or discovery_topic == "":
-    logger.info("Parameter " + str(discovery_topic) + " was not passed. Default topic (homeassistant) is used.")
-    discovery_topic = DEFAULT_DISCOVERY_TOPIC
-
-  if door_sensor_available == None:
-    door_sensor_available = False
-  
-  if keypad_available == None:
-    keypad_available = False
 
   # Lock
   name = device_name
