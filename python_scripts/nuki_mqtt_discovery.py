@@ -53,8 +53,8 @@ DOOR_STATE_TAMPERED = 240
 DOOR_STATE_UNKNOWN = 255
 
 
-def get_error_message(parameter):
-  return "Parameter " + parameter + " is required!"
+def get_error_message(parameter, value):
+  return "Parameter '" + parameter + "' is required! Current value is '" + str(value) + "'."
 
 
 def get_object_id(name):  
@@ -229,15 +229,15 @@ def main(hass, data):
     device_id = str(device_id)
 
   if device_id == None or device_id == "":
-    logger.error(get_error_message(device_id))
+    logger.error(get_error_message(DEVICE_ID, device_id))
     return
   
   if device_name == None or device_name == "":
-    logger.error(get_error_message(device_id))
+    logger.error(get_error_message(DEVICE_NAME, device_name))
     return
 
   if device_model == None or device_model == "":
-    logger.error(get_error_message(device_id))
+    logger.error(get_error_message(DEVICE_MODEL, device_model))
     return
 
   # Lock
