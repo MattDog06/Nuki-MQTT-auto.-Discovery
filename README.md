@@ -9,11 +9,11 @@ Python script for creating Home Assistant MQTT auto. discovery topics for a Nuki
 
 Just copy the URL of this repository and add it under HACS --> Custom Repositories (Category: Python-Script)
 
-### Paramters
+### Parameters
 
 | Parameter | Type | Required | Description | Example |
 | ---- | :--: | :------: | ----------- | ------- |
-| device_id | string | Yes | The device ID also known as Nuki Smart Lock ID. | 12345678 |
+| device_id | string | Yes | The device ID also known as Nuki Smart Lock ID. | 12345ABC |
 | device_name | string | Yes | The device name | Front Door Lock |
 | device_model | string | Yes | The device model | Smart Lock 3.0 Pro |
 | discovery_topic | string | No | The home assistant auto. discovery topic (Default: homeassistant) | homeassistant |
@@ -25,7 +25,7 @@ Just copy the URL of this repository and add it under HACS --> Custom Repositori
 ```yaml
 service: python_script.nuki_mqtt_discovery
 data:
-  device_id: 12345678
+  device_id: 12345ABC
   device_name: Front Door Lock
   device_model: Smart Lock 3.0 Pro
   discovery_topic: homeassistant

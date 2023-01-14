@@ -1,4 +1,4 @@
-# Paramters
+# Parameters
 DEVICE_ID = "device_id"
 DEVICE_NAME = "device_name"
 DEVICE_MODEL = "device_model"
@@ -17,7 +17,7 @@ TOPIC_BATTERY_CRITICAL = "batteryCritical"
 TOPIC_BATTERY_CHARGE_STATE = "batteryChargeState"
 TOPIC_BATTERY_CHARGING = "batteryCharging"
 TOPIC_DOOR_SENSOR_STATE = "doorsensorState"
-TOPIC_DOOR_SENSOR_BATTERY_CIRITCAL = "doorsensorBatteryCritical"
+TOPIC_DOOR_SENSOR_BATTERY_CRITICAL = "doorsensorBatteryCritical"
 TOPIC_KEYPAD_BATTERY_CRITICAL = "keypadBatteryCritical"
 
 # Lock states
@@ -61,8 +61,8 @@ def get_object_id(name):
   return name.replace(" ", "_").replace("-", "_").lower()
 
 
-def to_json(dictonary):
-  return '{}'.format(dictonary).replace("\'", "\"").replace("\"\"", "\'")
+def to_json(dictionary):
+  return '{}'.format(dictionary).replace("\'", "\"").replace("\"\"", "\'")
 
 
 def get_discovery_topic(discovery_topic, component, node_id, name):
@@ -176,7 +176,7 @@ def get_door_sensor_battery_critical_payload(device_id, device_name, device_mode
     'unique_id': get_object_id(name),
     'device_class': 'battery',
     'entity_category': 'diagnostic',
-    'state_topic': get_topic(device_id, TOPIC_DOOR_SENSOR_BATTERY_CIRITCAL),
+    'state_topic': get_topic(device_id, TOPIC_DOOR_SENSOR_BATTERY_CRITiCAL),
     'payload_off': 'false',
     'payload_on': 'true'
   })
