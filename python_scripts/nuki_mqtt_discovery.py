@@ -57,16 +57,12 @@ def get_error_message(parameter, value):
   return "Parameter '" + parameter + "' is required! Current value is '" + str(value) + "'."
 
 
-def get_object_id(name):  
-  return name.replace(" ", "_").replace("-", "_").lower()
-
-
 def to_json(dictonary):
   return '{}'.format(dictonary).replace("\'", "\"").replace("\"\"", "\'")
 
 
 def get_discovery_topic(discovery_topic, component, node_id, name):
-  return discovery_topic + "/" + component + "/" + node_id + "/" + get_object_id(name) + "/config"
+  return discovery_topic + "/" + component + "/" + node_id + "_" + name + "/config"
 
 
 def get_topic(device_id, topic):
@@ -99,7 +95,7 @@ def get_lock_payload(device_id, device_name, device_model, name):
     'availability': get_availability(device_id),
     'device': get_device(device_id, device_name, device_model),
     'name': name,
-    'unique_id': get_object_id(name),
+    'unique_id': device_id+"_lock",
     'command_topic': get_topic(device_id, TOPIC_LOCK_ACTION),
     'payload_lock': str(ACTION_LOCK),
     'payload_unlock': str(ACTION_UNLOCK),
@@ -118,7 +114,7 @@ def get_battery_critical_payload(device_id, device_name, device_model, name):
     'availability': get_availability(device_id),
     'device': get_device(device_id, device_name, device_model),
     'name': name,
-    'unique_id': get_object_id(name),
+    'unique_id': device_id+"_lock_battery_critical",
     'device_class': 'battery',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_BATTERY_CRITICAL),
@@ -132,7 +128,7 @@ def get_battery_charge_state_payload(device_id, device_name, device_model, name)
     'availability': get_availability(device_id),
     'device': get_device(device_id, device_name, device_model),
     'name': name,
-    'unique_id': get_object_id(name),
+    'unique_id': device_id+"_lock_battery_percent",
     'device_class': 'battery',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_BATTERY_CHARGE_STATE),
@@ -146,7 +142,7 @@ def get_battery_charging_payload(device_id, device_name, device_model, name):
     'availability': get_availability(device_id),
     'device': get_device(device_id, device_name, device_model),
     'name': name,
-    'unique_id': get_object_id(name),
+    'unique_id': device_id+"_battery_charging",
     'device_class': 'battery_charging',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_BATTERY_CHARGING),
@@ -160,7 +156,7 @@ def get_door_sensor_payload(device_id, device_name, device_model, name):
     'availability': get_availability(device_id),
     'device': get_device(device_id, device_name, device_model),
     'name': name,
-    'unique_id': get_object_id(name),
+    'unique_id': device_id+"_door_sensor",
     'device_class': 'door',
     'payload_off': str(DOOR_STATE_DOOR_CLOSED),
     'payload_on': str(DOOR_STATE_DOOR_OPENED),
@@ -173,7 +169,7 @@ def get_door_sensor_battery_critical_payload(device_id, device_name, device_mode
     'availability': get_availability(device_id),
     'device': get_device(device_id, device_name, device_model),
     'name': name,
-    'unique_id': get_object_id(name),
+    'unique_id': device_id="_door_sensor_battery_critical",
     'device_class': 'battery',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_DOOR_SENSOR_BATTERY_CIRITCAL),
@@ -187,7 +183,7 @@ def get_keypad_battery_critical_payload(device_id, device_name, device_model, na
     'availability': get_availability(device_id),
     'device': get_device(device_id, device_name, device_model),
     'name': name,
-    'unique_id': get_object_id(name),
+    'unique_id': device_id+"_keypad_battery_critical",
     'device_class': 'battery',
     'entity_category': 'diagnostic',
     'state_topic': get_topic(device_id, TOPIC_KEYPAD_BATTERY_CRITICAL),
@@ -196,12 +192,12 @@ def get_keypad_battery_critical_payload(device_id, device_name, device_model, na
   })
 
 
-def get_button_payload(device_id, device_name, device_model, name, action):
+def get_button_payload(device_id, device_name, device_model, name, action, action_id):
   return to_json({
     'availability': get_availability(device_id),
     'device': get_device(device_id, device_name, device_model),
     'name': name,
-    'unique_id': get_object_id(name),
+    'unique_id': device_id+"_"+action_id+"_button",
     'command_topic': get_topic(device_id, TOPIC_LOCK_ACTION),
     'payload_press': str(action)
   })
@@ -242,55 +238,55 @@ def main(hass, data):
 
   # Lock
   name = device_name
-  publish(hass, get_discovery_topic(discovery_topic, "lock", device_id, name),
+  publish(hass, get_discovery_topic(discovery_topic, "lock", device_id, "lock"),
     get_lock_payload(device_id, device_name, device_model, name))
 
   # Battery critical
   name = device_name + " Battery Critical"
-  publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, name), 
+  publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, "lock_battery_critical"), 
     get_battery_critical_payload(device_id, device_name, device_model, name))
 
   # Battery charge state
   name = device_name + " Battery"
-  publish(hass, get_discovery_topic(discovery_topic, "sensor", device_id, name),
+  publish(hass, get_discovery_topic(discovery_topic, "sensor", device_id, "battery_percent"),
     get_battery_charge_state_payload(device_id, device_name, device_model, name))
 
   # Battery charging
   name = device_name + " Battery Charging"
-  publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, name),
+  publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, "battery_charging"),
     get_battery_charging_payload(device_id, device_name, device_model, name))
 
   if door_sensor_available:
     # Door sensor
     name = device_name + " Door Sensor"
-    publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, name),
+    publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, "door_sensor"),
       get_door_sensor_payload(device_id, device_name, device_model, name))
 
     # Door sensor battery critical
     name = device_name + " Door Sensor Battery Critical"
-    publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, name), 
+    publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, "door_sensor_battery_critical"), 
       get_door_sensor_battery_critical_payload(device_id, device_name, device_model, name))
 
   if keypad_available:
     # Keypad battery critical
     name = device_name + " Keypad Battery Critical"
-    publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, name), 
+    publish(hass, get_discovery_topic(discovery_topic, "binary_sensor", device_id, "keypad_battery_critical"), 
       get_keypad_battery_critical_payload(device_id, device_name, device_model, name))
 
   # Unlatch button
   name = device_name + " Unlatch"
-  publish(hass, get_discovery_topic(discovery_topic, "button", device_id, name),
-    get_button_payload(device_id, device_name, device_model, name, ACTION_UNLATCH))
+  publish(hass, get_discovery_topic(discovery_topic, "button", device_id, "unlatch_button"),
+    get_button_payload(device_id, device_name, device_model, name, ACTION_UNLATCH, "unlatch"))
 
   # Lock'n'Go button
   name = device_name + " Lock-n-Go"
-  publish(hass, get_discovery_topic(discovery_topic, "button", device_id, name),
-    get_button_payload(device_id, device_name, device_model, name, ACTION_LOCKNGO))
+  publish(hass, get_discovery_topic(discovery_topic, "button", device_id, "unlatch_button"),
+    get_button_payload(device_id, device_name, device_model, name, ACTION_LOCKNGO, "lock_n_go"))
 
   # Lock'n'Go with unlatch button
   name = device_name + " Lock-n-Go With Unlatch"
-  publish(hass, get_discovery_topic(discovery_topic, "button", device_id, name),
-    get_button_payload(device_id, device_name, device_model, name, ACTION_LOCKNGO_UNLATCH))
+  publish(hass, get_discovery_topic(discovery_topic, "button", device_id, "lock_n_go_unlatch"),
+    get_button_payload(device_id, device_name, device_model, name, ACTION_LOCKNGO_UNLATCH, "lock_n_go_unlatch"))
 
 
 main(hass, data)
